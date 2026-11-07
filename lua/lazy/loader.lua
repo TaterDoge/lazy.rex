@@ -1,8 +1,13 @@
 local util = require("lazy.util")
 local M = {}
 
+local function plugin_root(plugin)
+  local rex = plugin.dir .. "/rex/lua"
+  return util.exists(rex) and rex or plugin.dir .. "/lua"
+end
+
 function M.add(plugin)
-  local root = plugin.dir .. "/lua"
+  local root = plugin_root(plugin)
   package.path = package.path .. ";" .. root .. "/?.lua;" .. root .. "/?/init.lua"
 end
 
@@ -15,7 +20,7 @@ local function main_module(plugin)
     return plugin.main
   end
   local modules, matched = {}, nil
-  for _, module in ipairs(util.modules(plugin.dir .. "/lua")) do
+  for _, module in ipairs(util.modules(plugin_root(plugin))) do
     if module.name ~= "" then
       modules[#modules + 1] = module.name
       if normalize(module.name) == normalize(plugin.name) then

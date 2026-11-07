@@ -170,17 +170,22 @@ return {
 
 ### 加载语义
 
-插件使用标准 `lua/` 模块布局：
+插件可使用 Rex 专用 `rex/lua/` 布局或标准 `lua/` 布局：
 
 ```text
 my-plugin/
-└── lua/
+├── rex/lua/          -- 该目录存在时优先
+│   └── my-plugin/
+│       └── init.lua
+└── lua/              -- 回退布局或标准 Lua 模块布局
     └── my-plugin/
         └── init.lua
 ```
 
-管理器把所有可用插件的 `lua/?.lua`、`lua/?/init.lua` 加入 `package.path`。
-不添加其他专用布局，不接管 `require`，保留标准 Lua 的搜索顺序和 `package.loaded` 行为。
+管理器为每个插件只选择一个根：`rex/lua/` 存在时选它，否则选 `lua/`。
+它把所选根的 `<root>/?.lua`、`<root>/?/init.lua` 加入 `package.path`，并用同一个根推断 `main`；两个根不会混用。
+`rex/lua/` 存在但为空或损坏时，不会静默回退到 `lua/`。
+它不接管 `require`，保留标准 Lua 的搜索顺序和 `package.loaded` 行为。
 模块名共享，插件作者应避免命名冲突。
 
 与 lazy.nvim 一样，**有 `opts` 或 `config = true` 才自动调用默认 `setup(opts)`**。

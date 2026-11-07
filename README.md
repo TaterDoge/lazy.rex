@@ -170,17 +170,22 @@ return {
 
 ### Loading semantics
 
-Plugins use the standard `lua/` module layout:
+Plugins may use a Rex-specific `rex/lua/` layout or the standard `lua/` layout:
 
 ```text
 my-plugin/
-└── lua/
+├── rex/lua/          -- preferred when this directory exists
+│   └── my-plugin/
+│       └── init.lua
+└── lua/              -- fallback, or a standard Lua module layout
     └── my-plugin/
         └── init.lua
 ```
 
-The manager adds `lua/?.lua` and `lua/?/init.lua` from every available plugin to `package.path`.
-It does not add other specialized layouts or take over `require`; standard Lua search order and `package.loaded` behavior are preserved.
+The manager chooses exactly one root per plugin: `rex/lua/` when that directory exists, otherwise `lua/`.
+It adds `<root>/?.lua` and `<root>/?/init.lua` from the selected root to `package.path` and uses the same root for `main` inference; the roots are never mixed.
+An empty or broken `rex/lua/` does not silently fall back to `lua/`.
+It does not take over `require`; standard Lua search order and `package.loaded` behavior are preserved.
 Module names are shared, so plugin authors should avoid naming conflicts.
 
 As with lazy.nvim, **the default `setup(opts)` is called automatically only when `opts` or `config = true` is present**.
