@@ -25,6 +25,8 @@ Rex 禁止 `os.execute`、`io.popen`；运行时所有外部命令都通过 `rex
 完整引导代码在 [`examples/lua/config/lazy.lua`](examples/lua/config/lazy.lua)。
 将其放入自己的配置模块，在 `init.lua` 中加载。
 
+想交给 coding agent 完成，复制 [`docs/agent-setup.md`](docs/agent-setup.md) 里的 prompt。
+
 引导代码在管理器缺失时执行 Git clone，成功后加入 Lua 搜索路径，再调用 `setup`。
 已安装时不联网、不自动更新。
 

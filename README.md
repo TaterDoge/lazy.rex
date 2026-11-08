@@ -25,6 +25,8 @@ Standalone test scripts are not subject to this restriction.
 The complete bootstrap code is in [`examples/lua/config/lazy.lua`](examples/lua/config/lazy.lua).
 Place it in your configuration module and load it from `init.lua`.
 
+To have a coding agent do the setup, copy the prompt in [`docs/agent-setup.md`](docs/agent-setup.md).
+
 If the manager is missing, the bootstrap code clones it with Git, adds it to the Lua search path, and calls `setup`.
 Once installed, it does not contact the network or update automatically.
 
